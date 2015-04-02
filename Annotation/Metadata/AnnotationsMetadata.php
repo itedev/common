@@ -78,6 +78,21 @@ class AnnotationsMetadata
     }
 
     /**
+     * @param $annotationName
+     * @return object|null
+     */
+    public function getClassAnnotation($annotationName)
+    {
+        $annotations = $this->getClassAnnotations();
+
+        if (!isset($annotations[$annotationName])) {
+            return null;
+        }
+
+        return $annotations[$annotationName];
+    }
+
+    /**
      * @return array
      */
     public function getMethodsAnnotations()
@@ -103,6 +118,22 @@ class AnnotationsMetadata
     }
 
     /**
+     * @param $methodName
+     * @param $annotationName
+     * @return object|null
+     */
+    public function getMethodAnnotation($methodName, $annotationName)
+    {
+        $annotations = $this->getMethodAnnotations($methodName);
+
+        if (!isset($annotations[$annotationName])) {
+            return null;
+        }
+
+        return $annotations[$annotationName];
+    }
+
+    /**
      * @return array
      */
     public function getPropertiesAnnotations()
@@ -116,7 +147,7 @@ class AnnotationsMetadata
      * @param $propertyName
      * @return array
      */
-    public function getPropertyAnnotation($propertyName)
+    public function getPropertyAnnotations($propertyName)
     {
         $this->loadPropertyAnnotations();
 
@@ -125,6 +156,22 @@ class AnnotationsMetadata
         }
 
         return $this->propertyAnnotations[$propertyName];
+    }
+
+    /**
+     * @param $propertyName
+     * @param $annotationName
+     * @return object|null
+     */
+    public function getPropertyAnnotation($propertyName, $annotationName)
+    {
+        $annotations = $this->getPropertyAnnotations($propertyName);
+
+        if (!isset($annotations[$annotationName])) {
+            return null;
+        }
+
+        return $annotations[$annotationName];
     }
 
     protected function loadClassAnnotations()
@@ -145,7 +192,9 @@ class AnnotationsMetadata
         $this->propertyAnnotations = [];
 
         foreach ($this->reflected->getProperties() as $reflectionProperty) {
-            $this->propertyAnnotations[$reflectionProperty->getName()] = $this->reader->getPropertyAnnotations($reflectionProperty);
+            $this->propertyAnnotations[$reflectionProperty->getName()] = $this->reader->getPropertyAnnotations(
+                $reflectionProperty
+            );
         }
     }
 
@@ -158,7 +207,9 @@ class AnnotationsMetadata
         $this->methodAnnotations = [];
 
         foreach ($this->reflected->getMethods() as $reflectionMethod) {
-            $this->methodAnnotations[$reflectionMethod->getName()] = $this->reader->getMethodAnnotations($reflectionMethod);
+            $this->methodAnnotations[$reflectionMethod->getName()] = $this->reader->getMethodAnnotations(
+                $reflectionMethod
+            );
         }
     }
 

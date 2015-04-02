@@ -1,0 +1,25 @@
+{
+  "name": "ite/common",
+  "type": "library",
+  "description": "Common features used to improve core PHP functionality.",
+  "keywords": [
+    "collections", "array", "annotations"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "sam0delkin",
+      "email": "t.samodelkin@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=5.3.2"
+  },
+  "autoload": {
+    "psr-0": {
+      "ITE\\Common": ""
+    }
+  },
+  "target-dir": "ITE/Common"
+}

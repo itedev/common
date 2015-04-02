@@ -14,7 +14,9 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "php": ">=5.3.2"
+    "php": ">=5.3.2",
+    "doctrine/annotations": "1.2.3",
+    "symfony/finder": "2.6.6"
   },
   "autoload": {
     "psr-0": {

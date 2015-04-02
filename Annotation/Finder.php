@@ -23,7 +23,7 @@ class Finder
      *
      * @param string|array $dir         The dir(s) to find annotations in.
      * @param bool         $recursively Specify is files will be found recursively.
-     * @return AnnotationsMetadata Metadata, contains all annotations data.
+     * @return AnnotationsMetadata[] Metadata, contains all annotations data.
      */
     public function findAnnotationsInDir($dir, $recursively = false)
     {

@@ -58,13 +58,20 @@ class AnnotationsMetadata
         $this->reflected = new \ReflectionClass($className);
     }
 
-
     /**
      * @return string
      */
     public function getClassName()
     {
         return $this->className;
+    }
+
+    /**
+     * @return \ReflectionClass
+     */
+    public function getReflected()
+    {
+        return $this->reflected;
     }
 
     /**

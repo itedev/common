@@ -85,11 +85,13 @@ class AnnotationsMetadata
     {
         $annotations = $this->getClassAnnotations();
 
-        if (!isset($annotations[$annotationName])) {
-            return null;
+        foreach ($annotations as $annotation) {
+            if ($annotation instanceof $annotationName) {
+                return $annotation;
+            }
         }
 
-        return $annotations[$annotationName];
+        return null;
     }
 
     /**
@@ -126,11 +128,13 @@ class AnnotationsMetadata
     {
         $annotations = $this->getMethodAnnotations($methodName);
 
-        if (!isset($annotations[$annotationName])) {
-            return null;
+        foreach ($annotations as $annotation) {
+            if ($annotation instanceof $annotationName) {
+                return $annotation;
+            }
         }
 
-        return $annotations[$annotationName];
+        return null;
     }
 
     /**
@@ -167,11 +171,13 @@ class AnnotationsMetadata
     {
         $annotations = $this->getPropertyAnnotations($propertyName);
 
-        if (!isset($annotations[$annotationName])) {
-            return null;
+        foreach ($annotations as $annotation) {
+            if ($annotation instanceof $annotationName) {
+                return $annotation;
+            }
         }
 
-        return $annotations[$annotationName];
+        return null;
     }
 
     protected function loadClassAnnotations()

@@ -35,8 +35,15 @@ class ExtensionFinder
 
             $reflected = new \ReflectionClass($className);
 
-            if ($reflected->newInstanceWithoutConstructor() instanceof $extensionInterface) {
-                $extensions[] = $className;
+            if (!$reflected->isInstantiable()) {
+               continue;
+            }
+            try {
+                if ($reflected->newInstanceWithoutConstructor() instanceof $extensionInterface) {
+                    $extensions[] = $className;
+                }
+            } catch (\ReflectionException $e) {
+                continue;
             }
         }
 

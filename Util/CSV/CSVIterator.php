@@ -1,6 +1,6 @@
 <?php
 
-namespace EXP\PricingEngineBundle\Core\Util;
+namespace ITE\Common\Util\CSV;
 
 /**
  * Class CSVIterator

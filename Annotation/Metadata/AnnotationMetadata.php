@@ -1,10 +1,4 @@
 <?php
-/**
- * This file is created by sam0delkin (t.samodelkin@gmail.com).
- * IT-Excellence (http://itedev.com)
- * Date: 02.04.2015
- * Time: 13:01
- */
 
 namespace ITE\Common\Annotation\Metadata;
 
@@ -12,11 +6,12 @@ namespace ITE\Common\Annotation\Metadata;
 use Doctrine\Common\Annotations\AnnotationReader;
 
 /**
- * Class AnnotationsMetadata
+ * Class AnnotationMetadata
  *
  * @package ITE\Common\Annotation\Metadata
+ * @author  sam0delkin <t.samodelkin@gmail.com>
  */
-class AnnotationsMetadata
+class AnnotationMetadata
 {
     /**
      * @var string
@@ -49,12 +44,13 @@ class AnnotationsMetadata
     private $reflected;
 
     /**
-     * @param $className
+     * @param string           $className
+     * @param AnnotationReader $reader
      */
-    function __construct($className)
+    function __construct($className, AnnotationReader $reader = null)
     {
         $this->className = $className;
-        $this->reader    = new AnnotationReader();
+        $this->reader    = $reader ?: new AnnotationReader();
         $this->reflected = new \ReflectionClass($className);
     }
 
@@ -102,22 +98,16 @@ class AnnotationsMetadata
     }
 
     /**
+     * @param string|null $methodName
      * @return array
      */
-    public function getMethodsAnnotations()
+    public function getMethodAnnotations($methodName = null)
     {
         $this->loadMethodAnnotations();
 
-        return $this->methodAnnotations;
-    }
-
-    /**
-     * @param $methodName
-     * @return array
-     */
-    public function getMethodAnnotations($methodName)
-    {
-        $this->loadMethodAnnotations();
+        if (!$methodName) {
+            return $this->methodAnnotations;
+        }
 
         if (!isset($this->methodAnnotations[$methodName])) {
             return [];
@@ -155,12 +145,16 @@ class AnnotationsMetadata
     }
 
     /**
-     * @param $propertyName
+     * @param string|null $propertyName
      * @return array
      */
-    public function getPropertyAnnotations($propertyName)
+    public function getPropertyAnnotations($propertyName = null)
     {
         $this->loadPropertyAnnotations();
+
+        if (!$propertyName) {
+            return $this->propertyAnnotations;
+        }
 
         if (!isset($this->propertyAnnotations[$propertyName])) {
             return [];

@@ -38,8 +38,9 @@ class ExtensionFinder
             if (!$reflected->isInstantiable()) {
                continue;
             }
+
             try {
-                if ($reflected->newInstanceWithoutConstructor() instanceof $extensionInterface) {
+                if ($reflected->isSubclassOf($extensionInterface)) {
                     $extensions[] = $className;
                 }
             } catch (\ReflectionException $e) {

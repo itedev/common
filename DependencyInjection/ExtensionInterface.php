@@ -27,6 +27,7 @@ interface ExtensionInterface
     /**
      * @param ArrayNodeDefinition $pluginsNode
      * @param ContainerBuilder $container
+     * @return null|ArrayNodeDefinition
      */
     public function addConfiguration(ArrayNodeDefinition $pluginsNode, ContainerBuilder $container);
 

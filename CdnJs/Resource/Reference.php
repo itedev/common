@@ -7,11 +7,10 @@ use ITE\Common\CdnJs\ApiWrapper;
 /**
  * Class Reference
  *
- * @package ITE\Common\CdnJs\Resource
  * @author  sam0delkin <t.samodelkin@gmail.com>
  */
-class Reference {
-
+class Reference
+{
     /**
      * @var string
      */
@@ -40,7 +39,6 @@ class Reference {
      */
     public function __construct($packageName, $version, $fileName, $protocol = 'http')
     {
-
         $this->packageName = $packageName;
         $this->version = $version;
         $this->fileName = $fileName;

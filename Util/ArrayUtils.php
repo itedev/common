@@ -4,7 +4,6 @@ namespace ITE\Common\Util;
 
 /**
  * Class ArrayUtils
- * @package ITE\FormBundle\Util
  */
 class ArrayUtils
 {

@@ -4,7 +4,6 @@ namespace ITE\Common\Util;
 
 /**
  * Class UrlUtils
- * @package ITE\FormBundle\Util
  */
 class UrlUtils
 {

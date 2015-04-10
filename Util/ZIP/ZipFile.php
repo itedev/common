@@ -5,7 +5,6 @@ namespace ITE\Common\Util\ZIP;
 /**
  * Class ZipFile
  *
- * @package EXP\PricingEngineBundle\Core\Manager\Util
  */
 class ZipFile
 {

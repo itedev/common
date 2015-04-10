@@ -4,7 +4,6 @@ namespace ITE\Common\Util;
 
 /**
  * Class LocaleUtils
- * @package ITE\FormBundle\Util
  */
 class LocaleUtils
 {

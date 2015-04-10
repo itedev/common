@@ -5,7 +5,6 @@ namespace ITE\Common\CdnJs;
 /**
  * Class ApiWrapper
  *
- * @package ITE\Common\CdnJs
  * @author  sam0delkin <t.samodelkin@gmail.com>
  */
 class ApiWrapper
@@ -46,9 +45,9 @@ class ApiWrapper
 
         foreach ($results as $result) {
             foreach($result['assets'] as $asset) {
-                if($asset['version'] == $version) {
-                    foreach($asset['files'] as $file) {
-                        if($file['name'] == $fileName) {
+                if ($asset['version'] == $version) {
+                    foreach ($asset['files'] as $file) {
+                        if ($file['name'] == $fileName) {
                             return self::buildCdnUrl($packageName, $version, $fileName, $protocol);
                         }
                     }

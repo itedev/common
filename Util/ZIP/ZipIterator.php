@@ -6,7 +6,6 @@ namespace ITE\Common\Util\ZIP;
 /**
  * Class ZipIterator
  *
- * @package EXP\PricingEngineBundle\Core\Manager\Util
  */
 class ZipIterator implements \Iterator, \Countable
 {

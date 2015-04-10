@@ -7,7 +7,6 @@ use Symfony\Component\ClassLoader\ClassMapGenerator;
 /**
  * Class ExtensionFinder
  *
- * @package ITE\Common\Extension
  * @author  sam0delkin <t.samodelkin@gmail.com>
  */
 class ExtensionFinder

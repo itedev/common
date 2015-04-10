@@ -2,7 +2,7 @@
 
 namespace ITE\Common\DependencyInjection;
 
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
@@ -25,11 +25,12 @@ interface ExtensionInterface
     public function loadConfiguration(array $config, ContainerBuilder $container);
 
     /**
-     * @param ArrayNodeDefinition $pluginsNode
+     * Return config tree for extend bundle config.
+     *
      * @param ContainerBuilder $container
-     * @return null|ArrayNodeDefinition
+     * @return null|NodeDefinition
      */
-    public function addConfiguration(ArrayNodeDefinition $pluginsNode, ContainerBuilder $container);
+    public function getConfiguration(ContainerBuilder $container);
 
 
 }

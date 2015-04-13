@@ -21,6 +21,10 @@
     "symfony/dependency-injection": "2.6.6",
     "symfony/config": "2.6.6"
   },
+  "suggest": {
+    "zendframework/zendgdata": "Provides an API to use LazyTableData with Google Spreadsheets.",
+    "phpoffice/phpexcel": "Provides an API to use LazyTableData with XLS/XLSX documents."
+  },
   "autoload": {
     "psr-0": {
       "ITE\\Common": ""

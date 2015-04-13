@@ -26,6 +26,16 @@ class CSVIterator implements \Iterator, \ArrayAccess, \Countable
     private $isOpen = false;
 
     /**
+     * @var string
+     */
+    private $delimiter;
+
+    /**
+     * @var string
+     */
+    private $fileName;
+
+    /**
      * Opens CSV file to iterate
      *
      * @param        $filename
@@ -49,6 +59,8 @@ class CSVIterator implements \Iterator, \ArrayAccess, \Countable
 
         $this->isOpen = true;
         $this->index  = 0;
+        $this->delimiter = $delimiter;
+        $this->fileName = $filename;
     }
 
 
@@ -233,5 +245,19 @@ class CSVIterator implements \Iterator, \ArrayAccess, \Countable
     public function count()
     {
         return count($this->data);
+    }
+
+    /**
+     * @param string|null $fileName
+     */
+    public function save($fileName = null)
+    {
+        $csvData = '';
+        foreach ($this->data as $row) {
+            $csvData .= implode($this->delimiter, $row) . "\n";
+        }
+        $csvData = substr($csvData, 0, strlen($csvData) - 1);
+
+        file_put_contents($fileName ?: $this->fileName, $csvData);
     }
 }

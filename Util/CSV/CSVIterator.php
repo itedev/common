@@ -5,7 +5,6 @@ namespace ITE\Common\Util\CSV;
 /**
  * Class CSVIterator
  *
- * @package EXP\PricingEngineBundle\Core\Manager\Util
  */
 class CSVIterator implements \Iterator, \ArrayAccess, \Countable
 {

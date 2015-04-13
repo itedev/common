@@ -2,13 +2,11 @@
 
 namespace ITE\Common\Annotation\Metadata;
 
-
 use Doctrine\Common\Annotations\AnnotationReader;
 
 /**
  * Class AnnotationMetadata
  *
- * @package ITE\Common\Annotation\Metadata
  * @author  sam0delkin <t.samodelkin@gmail.com>
  */
 class AnnotationMetadata
@@ -47,7 +45,7 @@ class AnnotationMetadata
      * @param string           $className
      * @param AnnotationReader $reader
      */
-    function __construct($className, AnnotationReader $reader = null)
+    public function __construct($className, AnnotationReader $reader = null)
     {
         $this->className = $className;
         $this->reader    = $reader ?: new AnnotationReader();
@@ -87,7 +85,6 @@ class AnnotationMetadata
     public function getClassAnnotation($annotationName)
     {
         $annotations = $this->getClassAnnotations();
-
         foreach ($annotations as $annotation) {
             if ($annotation instanceof $annotationName) {
                 return $annotation;
@@ -124,7 +121,6 @@ class AnnotationMetadata
     public function getMethodAnnotation($methodName, $annotationName)
     {
         $annotations = $this->getMethodAnnotations($methodName);
-
         foreach ($annotations as $annotation) {
             if ($annotation instanceof $annotationName) {
                 return $annotation;
@@ -171,7 +167,6 @@ class AnnotationMetadata
     public function getPropertyAnnotation($propertyName, $annotationName)
     {
         $annotations = $this->getPropertyAnnotations($propertyName);
-
         foreach ($annotations as $annotation) {
             if ($annotation instanceof $annotationName) {
                 return $annotation;
@@ -197,7 +192,6 @@ class AnnotationMetadata
         }
 
         $this->propertyAnnotations = [];
-
         foreach ($this->reflected->getProperties() as $reflectionProperty) {
             $this->propertyAnnotations[$reflectionProperty->getName()] = $this->reader->getPropertyAnnotations(
                 $reflectionProperty
@@ -212,7 +206,6 @@ class AnnotationMetadata
         }
 
         $this->methodAnnotations = [];
-
         foreach ($this->reflected->getMethods() as $reflectionMethod) {
             $this->methodAnnotations[$reflectionMethod->getName()] = $this->reader->getMethodAnnotations(
                 $reflectionMethod

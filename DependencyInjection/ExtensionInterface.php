@@ -8,7 +8,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Interface ExtensionInterface
  *
- * @package ITE\Common\DependencyInjection
  */
 interface ExtensionInterface
 {
@@ -31,6 +30,5 @@ interface ExtensionInterface
      * @return null|NodeDefinition
      */
     public function getConfiguration(ContainerBuilder $container);
-
 
 }

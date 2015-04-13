@@ -4,7 +4,6 @@ namespace ITE\Common\Util;
 
 /**
  * Class DateIntervalUtils
- * @package EXP\CoreBundle\Util
  */
 class DateIntervalUtils
 {

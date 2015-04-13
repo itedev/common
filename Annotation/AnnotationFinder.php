@@ -9,7 +9,6 @@ use Symfony\Component\ClassLoader\ClassMapGenerator;
 /**
  * Class AnnotationFinder
  *
- * @package ITE\Common\Annotation
  * @author  sam0delkin <t.samodelkin@gmail.com>
  */
 class AnnotationFinder
@@ -29,7 +28,6 @@ class AnnotationFinder
         $classes  = array_keys(ClassMapGenerator::createMap($iterator));
 
         $annotations = [];
-
         foreach ($classes as $className) {
             $annotations[$className] = new AnnotationMetadata($className, $annotationReader);
         }

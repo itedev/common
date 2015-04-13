@@ -60,8 +60,9 @@ class GoogleApiWorker implements ApiWorkerInterface
     function __construct($userName, $password, $spreadsheetId, $worksheetId)
     {
         if (!class_exists('ZendGData\HttpClient')) {
-            throw new \Exception('You should install "zendframework/zendgdata" composer package gor use this worker.');
+            throw new \Exception('You should install "zendframework/zendgdata" composer package for use this worker.');
         }
+
         $this->userName      = $userName;
         $this->password      = $password;
         $this->spreadsheetId = $spreadsheetId;

@@ -36,9 +36,14 @@ class XLSWorker implements ApiWorkerInterface
     /**
      * @param string $fileName
      * @param  int   $workSheetId
+     * @throws \Exception
      */
     function __construct($fileName, $workSheetId)
     {
+        if (!class_exists('PHPExcel')) {
+            throw new \Exception('You should install "phpoffice/phpexcel" composer package for use this worker.');
+        }
+
         if (!file_exists($fileName)) {
             throw new \InvalidArgumentException(sprintf('File "%s" does not exists.', $fileName));
         }

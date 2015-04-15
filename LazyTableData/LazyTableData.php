@@ -305,8 +305,24 @@ class LazyTableData implements \ArrayAccess, \Countable, \Iterator
      */
     public function rewind()
     {
-        $this->position = 0;
+        $this->position = $this->worker->getFirstRowIndex();
     }
 
+    /**
+     * @param $worksheetId
+     */
+    public function setWorksheet($worksheetId)
+    {
+        $this->worker->setWorksheet($worksheetId);
+        $this->dataCache = [];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWorksheet()
+    {
+        return $this->worker->getWorksheet();
+    }
 
 }

@@ -497,4 +497,21 @@ class GoogleApiWorker implements ApiWorkerInterface
         $this->worksheetId = $worksheetId;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getFirstRowIndex()
+    {
+        return 1;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWorksheet()
+    {
+        return $this->worksheetId;
+    }
+
+
 }

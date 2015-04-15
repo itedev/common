@@ -77,4 +77,14 @@ interface ApiWorkerInterface
      * @param $worksheetId
      */
     public function setWorksheet($worksheetId);
+
+    /**
+     * @return mixed
+     */
+    public function getWorksheet();
+
+    /**
+     * @return mixed
+     */
+    public function getFirstRowIndex();
 }

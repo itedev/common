@@ -137,5 +137,21 @@ class CSVWorker implements ApiWorkerInterface
 
     }
 
+    /**
+     * @return mixed
+     */
+    public function getWorksheet()
+    {
+        return null;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFirstRowIndex()
+    {
+        return 0;
+    }
+
 
 }

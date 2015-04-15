@@ -200,4 +200,21 @@ class XLSWorker implements ApiWorkerInterface
        return $this->excelInstance->getSheetCount();
     }
 
+    /**
+     * @return mixed
+     */
+    public function getFirstRowIndex()
+    {
+        return 1;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWorksheet()
+    {
+        return $this->workSheetId;
+    }
+
+
 }

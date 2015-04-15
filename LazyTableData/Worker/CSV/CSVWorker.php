@@ -129,5 +129,13 @@ class CSVWorker implements ApiWorkerInterface
         return $this->csvIterator->count();
     }
 
+    /**
+     * @param $worksheetId
+     */
+    public function setWorksheet($worksheetId)
+    {
+
+    }
+
 
 }

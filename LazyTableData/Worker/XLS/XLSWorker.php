@@ -24,11 +24,6 @@ class XLSWorker implements ApiWorkerInterface
     private $workSheetId;
 
     /**
-     * @var array
-     */
-    private $data;
-
-    /**
      * @var PHPExcel
      */
     private $excelInstance;
@@ -50,6 +45,15 @@ class XLSWorker implements ApiWorkerInterface
 
         $this->fileName    = $fileName;
         $this->workSheetId = $workSheetId;
+        $this->excelInstance = PHPExcel_IOFactory::load($this->fileName);
+    }
+
+    /**
+     * @param $worksheetId
+     */
+    public function setWorksheet($worksheetId)
+    {
+        $this->workSheetId = $worksheetId;
     }
 
 
@@ -59,9 +63,19 @@ class XLSWorker implements ApiWorkerInterface
      */
     public function loadRow($rowNumber)
     {
-        $this->loadWholeTable();
+        $row      = [];
+        $iterator = $this->excelInstance->getSheet($this->workSheetId)
+            ->getRowIterator($rowNumber)
+            ->current()
+            ->getCellIterator();
 
-        return $this->data[$rowNumber];
+        foreach ($iterator as $cell) {
+            $row[] = $cell->getValue();
+        }
+
+
+
+        return $row;
     }
 
     /**
@@ -71,9 +85,9 @@ class XLSWorker implements ApiWorkerInterface
      */
     public function loadCell($rowNumber, $cellNumber)
     {
-        $this->loadWholeTable();
-
-        return $this->data[$rowNumber][$cellNumber];
+        return $this->excelInstance->getSheet($this->workSheetId)
+            ->getCellByColumnAndRow($cellNumber, $rowNumber)
+            ->getValue();
     }
 
     /**
@@ -81,18 +95,14 @@ class XLSWorker implements ApiWorkerInterface
      */
     public function loadWholeTable()
     {
-        if (!empty($this->data)) {
-            return $this->data;
-        }
-
-        $excel   = $this->excelInstance = PHPExcel_IOFactory::load($this->fileName);
-        $rowData = $excel->getSheet($this->workSheetId)->toArray();
+        $rowData = $this->excelInstance->getSheet($this->workSheetId)->toArray();
+        $data = [];
 
         foreach ($rowData as $number => $row) {
-            $this->data []= new Row($this, $number, $row);
+            $data []= new Row($this, $number, $row);
         }
 
-        return $this->data;
+        return $data;
     }
 
     /**
@@ -101,8 +111,7 @@ class XLSWorker implements ApiWorkerInterface
      */
     public function saveWholeTable($rowData)
     {
-        $this->data = $rowData;
-        $this->excelInstance->getSheet($this->workSheetId)->fromArray($this->data);
+        $this->excelInstance->getSheet($this->workSheetId)->fromArray($rowData);
         $writer = PHPExcel_IOFactory::createWriter($this->excelInstance);
         $writer->save($this->fileName);
     }
@@ -114,8 +123,14 @@ class XLSWorker implements ApiWorkerInterface
      */
     public function updateRow($rowNumber, Row $rowData)
     {
-        $this->data[$rowNumber] = $rowData;
-        $this->saveWholeTable($this->data);
+        $iterator = $this->excelInstance->getSheet($this->workSheetId)->getRowIterator($rowNumber)->current()->getCellIterator();
+
+        foreach ($iterator as $key => $cell) {
+            $cell->setValue($rowData[$key]);
+        }
+
+        $writer = PHPExcel_IOFactory::createWriter($this->excelInstance);
+        $writer->save($this->fileName);
     }
 
     /**
@@ -126,8 +141,16 @@ class XLSWorker implements ApiWorkerInterface
      */
     public function updateCell($rowNumber, $cellNumber, $cellData)
     {
-        $this->data[$rowNumber][$cellNumber] = $cellData;
-        $this->saveWholeTable($this->data);
+        $iterator = $this->excelInstance->getSheet($this->workSheetId)->getRowIterator($rowNumber)->current()->getCellIterator();
+
+        foreach ($iterator as $key => $cell) {
+            if ($key == $cellNumber) {
+               $cell->setValue($cellData);
+            }
+        }
+
+        $writer = PHPExcel_IOFactory::createWriter($this->excelInstance);
+        $writer->save($this->fileName);
     }
 
     /**
@@ -136,8 +159,9 @@ class XLSWorker implements ApiWorkerInterface
      */
     public function removeRow($rowNumber)
     {
-        unset($this->data[$rowNumber]);
-        $this->saveWholeTable($this->data);
+        $this->excelInstance->getSheet($this->workSheetId)->removeRow($rowNumber);
+        $writer = PHPExcel_IOFactory::createWriter($this->excelInstance);
+        $writer->save($this->fileName);
     }
 
     /**
@@ -146,8 +170,9 @@ class XLSWorker implements ApiWorkerInterface
      */
     public function insertRow(Row $rowData)
     {
-        $this->data[]= $rowData;
-        $this->saveWholeTable($this->data);
+        $sheet = $this->excelInstance->getSheet($this->workSheetId);
+        $sheet->insertNewRowBefore();
+        $this->updateRow(1, $rowData);
     }
 
     /**
@@ -156,9 +181,7 @@ class XLSWorker implements ApiWorkerInterface
      */
     public function rowExists($rowNumber)
     {
-        $this->loadWholeTable();
-
-        return isset($this->data[$rowNumber]);
+        return $this->excelInstance->getSheet($this->workSheetId)->cellExistsByColumnAndRow(0, $rowNumber);
     }
 
     /**
@@ -166,9 +189,7 @@ class XLSWorker implements ApiWorkerInterface
      */
     public function getRowsCount()
     {
-        $this->loadWholeTable();
-
-        return count($this->data);
+        return $this->excelInstance->getSheet($this->workSheetId)->getHighestRow();
     }
 
     /**
@@ -176,9 +197,7 @@ class XLSWorker implements ApiWorkerInterface
      */
     public function getSpreadsheetCount()
     {
-        $this->loadWholeTable();
-
-        return $this->excelInstance->getSheetCount();
+       return $this->excelInstance->getSheetCount();
     }
 
 }

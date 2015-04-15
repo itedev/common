@@ -72,4 +72,9 @@ interface ApiWorkerInterface
      * @return int
      */
     public function getRowsCount();
+
+    /**
+     * @param $worksheetId
+     */
+    public function setWorksheet($worksheetId);
 }

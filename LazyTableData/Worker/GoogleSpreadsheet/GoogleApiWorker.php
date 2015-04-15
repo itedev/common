@@ -489,4 +489,12 @@ class GoogleApiWorker implements ApiWorkerInterface
         $resp = $this->service->post($xml, $cellFeed->getLink('http://schemas.google.com/g/2005#batch')->getHref());
     }
 
+    /**
+     * @param $worksheetId
+     */
+    public function setWorksheet($worksheetId)
+    {
+        $this->worksheetId = $worksheetId;
+    }
+
 }

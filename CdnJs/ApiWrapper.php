@@ -10,8 +10,8 @@ namespace ITE\Common\CdnJs;
 class ApiWrapper
 {
     const API_URL = 'http://api.cdnjs.com/libraries';
-    const CDN_HTTP_URL = 'http://cdnjs.cloudflare.com/ajax/libs/';
-    const CDN_HTTPS_URL = 'https://cdnjs.cloudflare.com/ajax/libs/';
+    const CDN_HTTP_URL = 'http://cdnjs.cloudflare.com/ajax/libs';
+    const CDN_HTTPS_URL = 'https://cdnjs.cloudflare.com/ajax/libs';
 
     /**
      * Search by packages

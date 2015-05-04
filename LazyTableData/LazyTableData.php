@@ -248,6 +248,17 @@ class LazyTableData implements \ArrayAccess, \Countable, \Iterator
     }
 
     /**
+     * @param ApiWorkerInterface $worker
+     * @return $this
+     */
+    public function setWorker($worker)
+    {
+        $this->worker = $worker;
+
+        return $this;
+    }
+
+    /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Return the current element
      *

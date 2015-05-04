@@ -158,7 +158,7 @@ class CSVIterator implements \Iterator, \ArrayAccess, \Countable
             throw new \Exception("No CSV file opened");
         }
 
-        return isset($this->data[$this->index]);
+        return isset($this->data[$offset]);
     }
 
     /**

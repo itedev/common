@@ -254,6 +254,7 @@ class LazyTableData implements \ArrayAccess, \Countable, \Iterator
     public function setWorker($worker)
     {
         $this->worker = $worker;
+        $this->dataCache = [];
 
         return $this;
     }

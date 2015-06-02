@@ -181,7 +181,7 @@ class XLSWorker implements ApiWorkerInterface
      */
     public function rowExists($rowNumber)
     {
-        return $this->excelInstance->getSheet($this->workSheetId)->cellExistsByColumnAndRow(0, $rowNumber);
+        return $rowNumber < $this->getRowsCount();
     }
 
     /**

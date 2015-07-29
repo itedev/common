@@ -110,8 +110,6 @@ class Row implements \ArrayAccess, \Countable
             return $this->dataCache[$offset];
         }
 
-        $this->isFullyLoaded = true;
-
         return $this->dataCache[$offset] = $this->worker->loadCell($this->rowNumber, $offset);
     }
 

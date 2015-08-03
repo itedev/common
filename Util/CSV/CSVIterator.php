@@ -259,4 +259,17 @@ class CSVIterator implements \Iterator, \ArrayAccess, \Countable
 
         file_put_contents($fileName ?: $this->fileName, $csvData);
     }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    public function toArray()
+    {
+        if (!$this->isOpen) {
+            throw new \Exception("No CSV file opened");
+        }
+
+        return $this->data;
+    }
 }

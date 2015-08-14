@@ -15,11 +15,11 @@
   "minimum-stability": "dev",
   "require": {
     "php": ">=5.4",
-    "doctrine/annotations": "1.2.3",
-    "symfony/finder": "2.6.6",
-    "symfony/class-loader": "2.6.6",
-    "symfony/dependency-injection": "2.6.6",
-    "symfony/config": "2.6.6"
+    "doctrine/annotations": "1.2.*",
+    "symfony/finder": "2.6.*",
+    "symfony/class-loader": "2.6.*",
+    "symfony/dependency-injection": "2.6.*",
+    "symfony/config": "2.6.*"
   },
   "suggest": {
     "zendframework/zendgdata": "Provides an API to use LazyTableData with Google Spreadsheets.",

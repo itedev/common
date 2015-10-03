@@ -8,9 +8,18 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Interface ExtensionInterface
  *
+ * @author c1tru55 <mr.c1tru55@gmail.com>
  */
 interface ExtensionInterface
 {
+    /**
+     * Return config tree for extend bundle config.
+     *
+     * @param ContainerBuilder $container
+     * @return null|NodeDefinition
+     */
+    public function getConfiguration(ContainerBuilder $container);
+
     /**
      * Loads a specific configuration.
      *
@@ -22,13 +31,4 @@ interface ExtensionInterface
      * @api
      */
     public function loadConfiguration(array $config, ContainerBuilder $container);
-
-    /**
-     * Return config tree for extend bundle config.
-     *
-     * @param ContainerBuilder $container
-     * @return null|NodeDefinition
-     */
-    public function getConfiguration(ContainerBuilder $container);
-
 }

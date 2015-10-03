@@ -7,7 +7,7 @@ use ITE\Common\CdnJs\ApiWrapper;
 /**
  * Class Reference
  *
- * @author  sam0delkin <t.samodelkin@gmail.com>
+ * @author sam0delkin <t.samodelkin@gmail.com>
  */
 class Reference
 {

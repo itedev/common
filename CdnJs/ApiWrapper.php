@@ -5,7 +5,7 @@ namespace ITE\Common\CdnJs;
 /**
  * Class ApiWrapper
  *
- * @author  sam0delkin <t.samodelkin@gmail.com>
+ * @author sam0delkin <t.samodelkin@gmail.com>
  */
 class ApiWrapper
 {
@@ -20,7 +20,7 @@ class ApiWrapper
      * @param array  $fields
      * @return mixed
      */
-    public function search($query, $fields = ['version','description', 'homepage', 'keywords', 'maintainers','assets'])
+    public function search($query, $fields = ['version', 'description', 'homepage', 'keywords', 'maintainers', 'assets'])
     {
         $rawResult = file_get_contents($this->buildApiUrl($query, $fields));
         $result = json_decode($rawResult, true);

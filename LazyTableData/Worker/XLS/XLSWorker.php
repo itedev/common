@@ -181,7 +181,7 @@ class XLSWorker implements ApiWorkerInterface
      */
     public function rowExists($rowNumber)
     {
-        return $rowNumber < $this->getRowsCount();
+        return $rowNumber <= $this->getRowsCount();
     }
 
     /**

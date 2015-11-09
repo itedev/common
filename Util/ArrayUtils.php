@@ -90,4 +90,37 @@ class ArrayUtils
 
         return $result;
     }
+
+    /**
+     * @param array $array
+     * @param string $name
+     * @param mixed|null $defaultValue
+     * @return mixed|null
+     */
+    public static function getValue(array $array, $name, $defaultValue = null)
+    {
+        return array_key_exists($name, $array)
+            ? $array[$name]
+            : $defaultValue;
+    }
+
+    /**
+     * @param array $array
+     * @param string $groupName
+     * @param bool $caseSensitive
+     * @return array
+     */
+    public static function groupBy(array $array, $groupName, $caseSensitive = false)
+    {
+        $result = [];
+        foreach ($array as $name => $value) {
+            $groupValue = $value[$groupName];
+            if (is_string($groupValue) && false === $caseSensitive) {
+                $groupValue = strtolower($groupValue);
+            }
+            $result[$groupValue][$name] = $value;
+        }
+
+        return $result;
+    }
 }

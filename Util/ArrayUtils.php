@@ -2,6 +2,9 @@
 
 namespace ITE\Common\Util;
 
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyPathInterface;
+
 /**
  * Class ArrayUtils
  */
@@ -86,6 +89,24 @@ class ArrayUtils
         $result = [];
         foreach ($array as $i => $value) {
             $result[$value[$key]] = $value;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array $array
+     * @param string|PropertyPathInterface $propertyPath
+     * @return array
+     */
+    public static function indexByPropertyPath(array $array, $propertyPath)
+    {
+        $propertyAccessor = PropertyAccess::createPropertyAccessor();
+
+        $result = [];
+        foreach ($array as $i => $value) {
+            $propertyValue = $propertyAccessor->getValue($value, $propertyPath);
+            $result[$propertyValue] = $value;
         }
 
         return $result;

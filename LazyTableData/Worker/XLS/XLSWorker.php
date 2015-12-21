@@ -33,7 +33,7 @@ class XLSWorker implements ApiWorkerInterface
      * @param  int   $workSheetId
      * @throws \Exception
      */
-    function __construct($fileName, $workSheetId)
+    public function __construct($fileName, $workSheetId)
     {
         if (!class_exists('PHPExcel')) {
             throw new \Exception('You should install "phpoffice/phpexcel" composer package for use this worker.');
@@ -100,21 +100,20 @@ class XLSWorker implements ApiWorkerInterface
         $data = [];
 
         foreach ($rowData as $number => $row) {
-            $data []= new Row($this, $number, $row);
+            $data[] = new Row($this, $number, $row);
         }
 
         return $data;
     }
 
     /**
-     * @param Row[] $rowData
-     * @return null
+     * {@inheritdoc}
      */
-    public function saveWholeTable($rowData)
+    public function saveWholeTable($rowData, $fileName = null)
     {
         $this->excelInstance->getSheet($this->workSheetId)->fromArray($rowData);
-        $writer = PHPExcel_IOFactory::createWriter($this->excelInstance);
-        $writer->save($this->fileName);
+        $writer = PHPExcel_IOFactory::createWriter($this->excelInstance, 'Excel2007');
+        $writer->save($fileName ? : $this->fileName);
     }
 
     /**
@@ -130,7 +129,7 @@ class XLSWorker implements ApiWorkerInterface
             $cell->setValue($rowData[$key]);
         }
 
-        $writer = PHPExcel_IOFactory::createWriter($this->excelInstance);
+        $writer = PHPExcel_IOFactory::createWriter($this->excelInstance, 'Excel2007');
         $writer->save($this->fileName);
     }
 
@@ -150,7 +149,7 @@ class XLSWorker implements ApiWorkerInterface
             }
         }
 
-        $writer = PHPExcel_IOFactory::createWriter($this->excelInstance);
+        $writer = PHPExcel_IOFactory::createWriter($this->excelInstance, 'Excel2007');
         $writer->save($this->fileName);
     }
 
@@ -161,7 +160,7 @@ class XLSWorker implements ApiWorkerInterface
     public function removeRow($rowNumber)
     {
         $this->excelInstance->getSheet($this->workSheetId)->removeRow($rowNumber);
-        $writer = PHPExcel_IOFactory::createWriter($this->excelInstance);
+        $writer = PHPExcel_IOFactory::createWriter($this->excelInstance, 'Excel2007');
         $writer->save($this->fileName);
     }
 
@@ -216,6 +215,4 @@ class XLSWorker implements ApiWorkerInterface
     {
         return $this->workSheetId;
     }
-
-
 }

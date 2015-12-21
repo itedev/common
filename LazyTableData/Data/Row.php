@@ -42,7 +42,7 @@ class Row implements \ArrayAccess, \Countable
      * @param int                $rowNumber
      * @param array              $rowData
      */
-    function __construct(ApiWorkerInterface $worker, $rowNumber, $rowData = [])
+    public function __construct(ApiWorkerInterface $worker, $rowNumber, $rowData = [])
     {
         $this->worker    = $worker;
         $this->rowNumber = $rowNumber;
@@ -59,7 +59,6 @@ class Row implements \ArrayAccess, \Countable
     {
         $this->saveType = $saveType;
     }
-
 
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
@@ -80,7 +79,7 @@ class Row implements \ArrayAccess, \Countable
             return true;
         }
 
-        if($this->isFullyLoaded){
+        if ($this->isFullyLoaded) {
             return false;
         }
 
@@ -128,12 +127,12 @@ class Row implements \ArrayAccess, \Countable
      */
     public function offsetSet($offset, $value)
     {
-        if(isset($this->dataCache[$offset]) && $this->dataCache[$offset] === $value){
+        if (isset($this->dataCache[$offset]) && $this->dataCache[$offset] === $value) {
             return;
         }
 
         $this->dataCache[$offset] = $value;
-        if($this->saveType === LazyTableData::SAVE_TYPE_EAGER) {
+        if ($this->saveType === LazyTableData::SAVE_TYPE_EAGER) {
             $this->worker->updateCell($this->rowNumber, $offset, $value);
         }
     }
@@ -151,7 +150,7 @@ class Row implements \ArrayAccess, \Countable
     public function offsetUnset($offset)
     {
         unset($this->dataCache[$offset]);
-        if($this->saveType === LazyTableData::SAVE_TYPE_EAGER) {
+        if ($this->saveType === LazyTableData::SAVE_TYPE_EAGER) {
             $this->worker->updateCell($this->rowNumber, $offset, '');
         }
     }

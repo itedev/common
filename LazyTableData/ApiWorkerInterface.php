@@ -31,9 +31,10 @@ interface ApiWorkerInterface
 
     /**
      * @param Row[] $rowData
+     * @param string|null $fileName
      * @return null
      */
-    public function saveWholeTable($rowData);
+    public function saveWholeTable($rowData, $fileName = null);
 
     /**
      * @param int $rowNumber

@@ -13,7 +13,6 @@ use ITE\Common\Util\CSV\CSVIterator;
  */
 class CSVWorker implements ApiWorkerInterface
 {
-
     /**
      * @var CSVIterator
      */
@@ -23,7 +22,7 @@ class CSVWorker implements ApiWorkerInterface
      * @param        $fileName
      * @param string $delimiter
      */
-    function __construct($fileName, $delimiter = ';')
+    public function __construct($fileName, $delimiter = ';')
     {
         $this->csvIterator = new CSVIterator();
         $this->csvIterator->open($fileName, $delimiter);
@@ -57,16 +56,15 @@ class CSVWorker implements ApiWorkerInterface
     }
 
     /**
-     * @param Row[] $rowData
-     * @return null
+     * {@inheritdoc}
      */
-    public function saveWholeTable($rowData)
+    public function saveWholeTable($rowData, $fileName = null)
     {
         foreach ($rowData as $key => $data) {
             $this->csvIterator[$key] = $data->toArray();
         }
 
-        $this->csvIterator->save();
+        $this->csvIterator->save($fileName);
     }
 
     /**
@@ -152,6 +150,4 @@ class CSVWorker implements ApiWorkerInterface
     {
         return 0;
     }
-
-
 }

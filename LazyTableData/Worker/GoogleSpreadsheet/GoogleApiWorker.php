@@ -57,7 +57,7 @@ class GoogleApiWorker implements ApiWorkerInterface
      *
      * @throws \Exception
      */
-    function __construct($userName, $password, $spreadsheetId, $worksheetId)
+    public function __construct($userName, $password, $spreadsheetId, $worksheetId)
     {
         if (!class_exists('ZendGData\HttpClient')) {
             throw new \Exception('You should install "zendframework/zendgdata" composer package for use this worker.');
@@ -216,7 +216,6 @@ class GoogleApiWorker implements ApiWorkerInterface
     {
         $this->initializeIfNeeded();
 
-
         $query = $this->getEmptyCellQuery();
         $query->setMinRow($rowNumber);
         $query->setMaxRow($rowNumber);
@@ -248,7 +247,6 @@ class GoogleApiWorker implements ApiWorkerInterface
         $xml = $batchRequest->createRequestXml($cellFeed);
 
         $resp = $this->service->post($xml, $cellFeed->getLink('http://schemas.google.com/g/2005#batch')->getHref());
-
     }
 
     /**
@@ -265,7 +263,7 @@ class GoogleApiWorker implements ApiWorkerInterface
         try {
             $this->service->updateCell($rowNumber, $cellNumber, $cellData, $this->spreadsheetId, $this->worksheetId);
         } catch (\Exception $e) {
-            if($this->getRowsCount() < $rowNumber) {
+            if ($this->getRowsCount() < $rowNumber) {
                 $this->incrementRowsCount();
             }
             $this->service->updateCell($rowNumber, $cellNumber, $cellData, $this->spreadsheetId, $this->worksheetId);
@@ -443,7 +441,7 @@ class GoogleApiWorker implements ApiWorkerInterface
         $currentRowData = [];
         /** @var CellEntry $cellEntry */
         foreach ($cellFeed as $cellEntry) {
-            if($cellEntry->getCell()->getRow() != $currentRow){
+            if ($cellEntry->getCell()->getRow() != $currentRow) {
                 $ret[$currentRow] = new Row($this, $currentRow, $currentRowData);
                 $currentRow = $cellEntry->getCell()->getRow();
                 $currentRowData = [];
@@ -456,10 +454,9 @@ class GoogleApiWorker implements ApiWorkerInterface
     }
 
     /**
-     * @param Row[] $rowData
-     * @return null
+     * {@inheritdoc}
      */
-    public function saveWholeTable($rowData)
+    public function saveWholeTable($rowData, $fileName = null)
     {
         $this->initializeIfNeeded();
 
@@ -478,7 +475,7 @@ class GoogleApiWorker implements ApiWorkerInterface
 
         /** @var CellEntry $cellEntry */
         foreach ($cellFeed as $key => $cellEntry) {
-            if(isset($rowData[$cellEntry->getCell()->getRow()]) && isset($rowData[$cellEntry->getCell()->getRow()][$cellEntry->getCell()->getColumn()])) {
+            if (isset($rowData[$cellEntry->getCell()->getRow()]) && isset($rowData[$cellEntry->getCell()->getRow()][$cellEntry->getCell()->getColumn()])) {
                 $cellEntry->getCell()->setInputValue($rowData[$cellEntry->getCell()->getRow()][$cellEntry->getCell()->getColumn()]);
                 $batchRequest->addEntry($cellEntry);
             }
@@ -512,6 +509,4 @@ class GoogleApiWorker implements ApiWorkerInterface
     {
         return $this->worksheetId;
     }
-
-
 }

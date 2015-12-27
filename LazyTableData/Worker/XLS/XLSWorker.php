@@ -68,7 +68,7 @@ class XLSWorker implements ApiWorkerInterface
             ->getRowIterator($rowNumber)
             ->current()
             ->getCellIterator();
-        $iterator->setIterateOnlyExistingCells(true);
+//        $iterator->setIterateOnlyExistingCells(true);
 
         foreach ($iterator as $cell) {
             $row[] = $cell->getValue();

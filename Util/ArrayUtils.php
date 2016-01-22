@@ -114,6 +114,22 @@ class ArrayUtils
 
     /**
      * @param array $array
+     * @param callable $callable
+     * @return array
+     */
+    public static function indexByCallable(array $array, $callable)
+    {
+        $result = [];
+        foreach ($array as $key => $value) {
+            $index = call_user_func_array($callable, [$value, $key]);
+            $result[$index] = $value;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array $array
      * @param string $name
      * @param mixed|null $defaultValue
      * @return mixed|null

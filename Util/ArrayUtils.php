@@ -3,6 +3,7 @@
 namespace ITE\Common\Util;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\PropertyAccess\PropertyPathInterface;
 
 /**
@@ -10,6 +11,11 @@ use Symfony\Component\PropertyAccess\PropertyPathInterface;
  */
 class ArrayUtils
 {
+    /**
+     * @var PropertyAccessor $propertyAccessor
+     */
+    protected static $propertyAccessor;
+
     /**
      * @return mixed
      */
@@ -101,7 +107,7 @@ class ArrayUtils
      */
     public static function indexByPropertyPath(array $array, $propertyPath)
     {
-        $propertyAccessor = PropertyAccess::createPropertyAccessor();
+        $propertyAccessor = self::getPropertyAccessor();
 
         $result = [];
         foreach ($array as $i => $value) {
@@ -143,6 +149,23 @@ class ArrayUtils
 
     /**
      * @param array $array
+     * @param string $propertyPath
+     * @param mixed|null $defaultValue
+     * @return mixed|null
+     */
+    public static function getValueByPropertyPath(array $array, $propertyPath, $defaultValue = null)
+    {
+        $propertyAccessor = self::getPropertyAccessor();
+
+        try {
+            return $propertyAccessor->getValue($array, $propertyPath);
+        } catch (\Exception $e) {
+            return $defaultValue;
+        }
+    }
+
+    /**
+     * @param array $array
      * @param string $groupName
      * @param bool $caseSensitive
      * @return array
@@ -159,5 +182,17 @@ class ArrayUtils
         }
 
         return $result;
+    }
+
+    /**
+     * @return PropertyAccessor
+     */
+    protected static function getPropertyAccessor()
+    {
+        if (null === self::$propertyAccessor) {
+            self::$propertyAccessor = PropertyAccess::createPropertyAccessor();
+        }
+
+        return self::$propertyAccessor;
     }
 }

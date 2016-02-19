@@ -44,4 +44,21 @@ class DateIntervalUtils
         + $interval->i * 60
         + $interval->s;
     }
-} 
+
+    /**
+     * @param \DateInterval $interval
+     * @return int
+     */
+    public static function toHours(\DateInterval $interval)
+    {
+        if (false !== $interval->days) {
+            return $interval->days * 24
+            + $interval->h;
+        }
+
+        return $interval->y * 365 * 24
+        + $interval->m * 30 * 24
+        + $interval->d * 24
+        + $interval->h;
+    }
+}

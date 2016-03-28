@@ -136,6 +136,34 @@ class ArrayUtils
 
     /**
      * @param array $array
+     * @param string $key
+     * @return bool
+     */
+    public static function sortByKey(array &$array, $key)
+    {
+        return usort($array, function ($a, $b) use ($key) {
+            return strcmp($a[$key], $b[$key]);
+        });
+    }
+
+    /**
+     * @param array $array
+     * @param string $propertyPath
+     * @return bool
+     */
+    public static function sortByPropertyPath(array &$array, $propertyPath)
+    {
+        $propertyAccessor = self::getPropertyAccessor();
+        return usort($array, function ($a, $b) use ($propertyAccessor, $propertyPath) {
+            return strcmp(
+                $propertyAccessor->getValue($a, $propertyPath),
+                $propertyAccessor->getValue($b, $propertyPath)
+            );
+        });
+    }
+
+    /**
+     * @param array $array
      * @param string $name
      * @param mixed|null $defaultValue
      * @return mixed|null

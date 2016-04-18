@@ -218,7 +218,9 @@ class ArrayUtils
     protected static function getPropertyAccessor()
     {
         if (null === self::$propertyAccessor) {
-            self::$propertyAccessor = PropertyAccess::createPropertyAccessor();
+            self::$propertyAccessor = PropertyAccess::createPropertyAccessorBuilder()
+                ->enableExceptionOnInvalidIndex()
+                ->getPropertyAccessor();
         }
 
         return self::$propertyAccessor;

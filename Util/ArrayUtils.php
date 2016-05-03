@@ -213,6 +213,18 @@ class ArrayUtils
     }
 
     /**
+     * @param array|object[] $array1
+     * @param array|object[] $array2
+     * @return array|object[]
+     */
+    public static function objectArrayDiff(array $array1, array $array2)
+    {
+        return array_udiff($array1, $array2, function ($object1, $object2) {
+            return strcmp(spl_object_hash($object1), spl_object_hash($object2));
+        });
+    }
+
+    /**
      * @return PropertyAccessor
      */
     protected static function getPropertyAccessor()

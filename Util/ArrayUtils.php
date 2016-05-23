@@ -137,29 +137,66 @@ class ArrayUtils
     /**
      * @param array $array
      * @param string $key
+     * @param string $direction
+     * @param callable|null $comparisonFunction
      * @return bool
      */
-    public static function sortByKey(array &$array, $key)
+    public static function sortByKey(array &$array, $key, $direction = 'asc', $comparisonFunction = null)
     {
-        return usort($array, function ($a, $b) use ($key) {
-            return strcmp($a[$key], $b[$key]);
+        $result = uasort($array, function ($a, $b) use ($key, $comparisonFunction) {
+            $aValue = $a[$key];
+            $bValue = $b[$key];
+
+            if (is_callable($comparisonFunction)) {
+                return call_user_func_array($comparisonFunction, [$aValue, $bValue]);
+            } else {
+                if ($aValue == $bValue) {
+                    return 0;
+                } else {
+                    return $aValue > $bValue ? 1 : -1;
+                }
+            }
         });
+        if ($result && 'desc' === $direction) {
+            $array = array_reverse($array, true);
+        }
+
+        return $result;
     }
 
     /**
      * @param array $array
      * @param string $propertyPath
+     * @param string $direction
+     * @param callable|null $comparisonFunction
      * @return bool
      */
-    public static function sortByPropertyPath(array &$array, $propertyPath)
-    {
+    public static function sortByPropertyPath(
+        array &$array,
+        $propertyPath,
+        $direction = 'asc',
+        $comparisonFunction = null
+    ) {
         $propertyAccessor = self::getPropertyAccessor();
-        return usort($array, function ($a, $b) use ($propertyAccessor, $propertyPath) {
-            return strcmp(
-                $propertyAccessor->getValue($a, $propertyPath),
-                $propertyAccessor->getValue($b, $propertyPath)
-            );
+        $result = uasort($array, function ($a, $b) use ($propertyAccessor, $propertyPath, $comparisonFunction) {
+            $aValue = $propertyAccessor->getValue($a, $propertyPath);
+            $bValue = $propertyAccessor->getValue($b, $propertyPath);
+
+            if (is_callable($comparisonFunction)) {
+                return call_user_func_array($comparisonFunction, [$aValue, $bValue]);
+            } else {
+                if ($aValue == $bValue) {
+                    return 0;
+                } else {
+                    return $aValue > $bValue ? 1 : -1;
+                }
+            }
         });
+        if ($result && 'desc' === $direction) {
+            $array = array_reverse($array, true);
+        }
+
+        return $result;
     }
 
     /**

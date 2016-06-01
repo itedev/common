@@ -201,14 +201,14 @@ class ArrayUtils
 
     /**
      * @param array $array
-     * @param string $name
+     * @param string $key
      * @param mixed|null $defaultValue
      * @return mixed|null
      */
-    public static function getValue(array $array, $name, $defaultValue = null)
+    public static function getValue(array $array, $key, $defaultValue = null)
     {
-        return array_key_exists($name, $array)
-            ? $array[$name]
+        return array_key_exists($key, $array)
+            ? $array[$key]
             : $defaultValue;
     }
 
@@ -231,19 +231,27 @@ class ArrayUtils
 
     /**
      * @param array $array
-     * @param string $groupName
+     * @param string|array $groupBy
      * @param bool $caseSensitive
      * @return array
      */
-    public static function groupBy(array $array, $groupName, $caseSensitive = false)
+    public static function groupBy(array $array, $groupBy, $caseSensitive = false)
     {
+        $groupKeys = is_array($groupBy) ? $groupBy : [$groupBy];
         $result = [];
-        foreach ($array as $name => $value) {
-            $groupValue = $value[$groupName];
-            if (is_string($groupValue) && false === $caseSensitive) {
-                $groupValue = strtolower($groupValue);
+        foreach ($array as $key => $value) {
+            $groupValues = [];
+            foreach ($groupKeys as $groupKey) {
+                $groupValue = $value[$groupKey];
+                if (is_string($groupValue) && false === $caseSensitive) {
+                    $groupValue = strtolower($groupValue);
+                }
+
+                $groupValues[$groupKey] = $groupValue;
             }
-            $result[$groupValue][$name] = $value;
+            $group = implode('-', $groupValues);
+
+            $result[$group][$key] = $value;
         }
 
         return $result;

@@ -17,6 +17,23 @@ class ArrayUtils
     protected static $propertyAccessor;
 
     /**
+     * @param array $array
+     * @param mixed $value
+     * @return bool
+     */
+    public static function remove(array &$array, $value)
+    {
+        $key = array_search($value, $array, true);
+        if ($key === false) {
+            return false;
+        }
+
+        unset($array[$key]);
+
+        return true;
+    }
+
+    /**
      * @return mixed
      */
     public static function replaceRecursive()

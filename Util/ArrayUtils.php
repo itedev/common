@@ -17,6 +17,23 @@ class ArrayUtils
     protected static $propertyAccessor;
 
     /**
+     * @param array $array
+     * @param mixed $value
+     * @return bool
+     */
+    public static function remove(array &$array, $value)
+    {
+        $key = array_search($value, $array, true);
+        if ($key === false) {
+            return false;
+        }
+
+        unset($array[$key]);
+
+        return true;
+    }
+
+    /**
      * @return mixed
      */
     public static function replaceRecursive()
@@ -137,41 +154,78 @@ class ArrayUtils
     /**
      * @param array $array
      * @param string $key
+     * @param string $direction
+     * @param callable|null $comparisonFunction
      * @return bool
      */
-    public static function sortByKey(array &$array, $key)
+    public static function sortByKey(array &$array, $key, $direction = 'asc', $comparisonFunction = null)
     {
-        return usort($array, function ($a, $b) use ($key) {
-            return strcmp($a[$key], $b[$key]);
+        $result = uasort($array, function ($a, $b) use ($key, $comparisonFunction) {
+            $aValue = $a[$key];
+            $bValue = $b[$key];
+
+            if (is_callable($comparisonFunction)) {
+                return call_user_func_array($comparisonFunction, [$aValue, $bValue]);
+            } else {
+                if ($aValue == $bValue) {
+                    return 0;
+                } else {
+                    return $aValue > $bValue ? 1 : -1;
+                }
+            }
         });
+        if ($result && 'desc' === $direction) {
+            $array = array_reverse($array, true);
+        }
+
+        return $result;
     }
 
     /**
      * @param array $array
      * @param string $propertyPath
+     * @param string $direction
+     * @param callable|null $comparisonFunction
      * @return bool
      */
-    public static function sortByPropertyPath(array &$array, $propertyPath)
-    {
+    public static function sortByPropertyPath(
+        array &$array,
+        $propertyPath,
+        $direction = 'asc',
+        $comparisonFunction = null
+    ) {
         $propertyAccessor = self::getPropertyAccessor();
-        return usort($array, function ($a, $b) use ($propertyAccessor, $propertyPath) {
-            return strcmp(
-                $propertyAccessor->getValue($a, $propertyPath),
-                $propertyAccessor->getValue($b, $propertyPath)
-            );
+        $result = uasort($array, function ($a, $b) use ($propertyAccessor, $propertyPath, $comparisonFunction) {
+            $aValue = $propertyAccessor->getValue($a, $propertyPath);
+            $bValue = $propertyAccessor->getValue($b, $propertyPath);
+
+            if (is_callable($comparisonFunction)) {
+                return call_user_func_array($comparisonFunction, [$aValue, $bValue]);
+            } else {
+                if ($aValue == $bValue) {
+                    return 0;
+                } else {
+                    return $aValue > $bValue ? 1 : -1;
+                }
+            }
         });
+        if ($result && 'desc' === $direction) {
+            $array = array_reverse($array, true);
+        }
+
+        return $result;
     }
 
     /**
      * @param array $array
-     * @param string $name
+     * @param string $key
      * @param mixed|null $defaultValue
      * @return mixed|null
      */
-    public static function getValue(array $array, $name, $defaultValue = null)
+    public static function getValue(array $array, $key, $defaultValue = null)
     {
-        return array_key_exists($name, $array)
-            ? $array[$name]
+        return array_key_exists($key, $array)
+            ? $array[$key]
             : $defaultValue;
     }
 
@@ -194,19 +248,27 @@ class ArrayUtils
 
     /**
      * @param array $array
-     * @param string $groupName
+     * @param string|array $groupBy
      * @param bool $caseSensitive
      * @return array
      */
-    public static function groupBy(array $array, $groupName, $caseSensitive = false)
+    public static function groupBy(array $array, $groupBy, $caseSensitive = false)
     {
+        $groupKeys = is_array($groupBy) ? $groupBy : [$groupBy];
         $result = [];
-        foreach ($array as $name => $value) {
-            $groupValue = $value[$groupName];
-            if (is_string($groupValue) && false === $caseSensitive) {
-                $groupValue = strtolower($groupValue);
+        foreach ($array as $key => $value) {
+            $groupValues = [];
+            foreach ($groupKeys as $groupKey) {
+                $groupValue = $value[$groupKey];
+                if (is_string($groupValue) && false === $caseSensitive) {
+                    $groupValue = strtolower($groupValue);
+                }
+
+                $groupValues[$groupKey] = $groupValue;
             }
-            $result[$groupValue][$name] = $value;
+            $group = implode('-', $groupValues);
+
+            $result[$group][$key] = $value;
         }
 
         return $result;

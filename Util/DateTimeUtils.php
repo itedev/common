@@ -39,8 +39,8 @@ class DateTimeUtils
         } else {
             $choices = [];
 
-            foreach ($days as $day) {
-                $choices[$day] = sprintf('%s.%s', $translationPrefix, $day);
+            foreach ($days as $key => $day) {
+                $choices[$key + 1] = sprintf('%s.%s', $translationPrefix, $day);
             }
 
             return $choices;

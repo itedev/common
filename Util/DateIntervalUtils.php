@@ -4,6 +4,8 @@ namespace ITE\Common\Util;
 
 /**
  * Class DateIntervalUtils
+ *
+ * @author c1tru55 <mr.c1tru55@gmail.com>
  */
 class DateIntervalUtils
 {

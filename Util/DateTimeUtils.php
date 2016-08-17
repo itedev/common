@@ -5,45 +5,21 @@ namespace ITE\Common\Util;
 /**
  * Class DateTimeUtils
  *
- * @author sam0delkin <t.samodelkin@gmail.com>
+ * @author c1tru55 <mr.c1tru55@gmail.com>
  */
 class DateTimeUtils
 {
     /**
-     * Return choices array of week days for Form choice field.
-     *
-     * @param null $translationPrefix
-     * @param bool $startsWithSunday
-     *
-     * @return array
+     * @param \DateTime $a
+     * @param \DateTime $b
+     * @return int
      */
-    public static function getWeekDayChoices($translationPrefix = null, $startsWithSunday = false)
+    public function compare(\DateTime $a, \DateTime $b)
     {
-        $days = [
-            'monday',
-            'tuesday',
-            'wednesday',
-            'thursday',
-            'friday',
-            'saturday',
-        ];
-
-        if ($startsWithSunday) {
-            array_unshift($days, 'sunday');
-        } else {
-            $days[] = 'sunday';
+        if ($a == $b) {
+            return 0;
         }
 
-        if (null === $translationPrefix) {
-            return array_combine($days, $days);
-        } else {
-            $choices = [];
-
-            foreach ($days as $key => $day) {
-                $choices[$key + 1] = sprintf('%s.%s', $translationPrefix, $day);
-            }
-
-            return $choices;
-        }
+        return $a < $b ? -1 : 1;
     }
 }

@@ -169,9 +169,9 @@ class ArrayUtils
             } else {
                 if ($aValue == $bValue) {
                     return 0;
-                } else {
-                    return $aValue > $bValue ? 1 : -1;
                 }
+
+                return $aValue > $bValue ? 1 : -1;
             }
         });
         if ($result && 'desc' === $direction) {

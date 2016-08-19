@@ -197,7 +197,15 @@ class XLSWorker implements ApiWorkerInterface
      */
     public function getSpreadsheetCount()
     {
-       return $this->excelInstance->getSheetCount();
+        return $this->excelInstance->getSheetCount();
+    }
+
+    /**
+     * @return PHPExcel
+     */
+    public function getExcelInstance()
+    {
+        return $this->excelInstance;
     }
 
     /**

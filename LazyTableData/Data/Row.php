@@ -196,4 +196,14 @@ class Row implements \ArrayAccess, \Countable
     {
         $this->worker->updateRow($this->rowNumber, $this);
     }
+
+    /**
+     * @return $this
+     */
+    public function clearCache()
+    {
+        $this->dataCache = [];
+
+        return $this;
+    }
 }

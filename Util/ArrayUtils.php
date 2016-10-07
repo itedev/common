@@ -275,6 +275,36 @@ class ArrayUtils
     }
 
     /**
+     * @param array $array
+     * @param string|array $groupBy
+     * @param bool $caseSensitive
+     * @return array
+     */
+    public static function groupByPropertyPath(array $array, $groupBy, $caseSensitive = false)
+    {
+        $propertyAccessor = self::getPropertyAccessor();
+
+        $groupPropertyPaths = is_array($groupBy) ? $groupBy : [$groupBy];
+        $result = [];
+        foreach ($array as $key => $value) {
+            $groupValues = [];
+            foreach ($groupPropertyPaths as $groupPropertyPath) {
+                $groupValue = $propertyAccessor->getValue($value, $groupPropertyPath);
+                if (is_string($groupValue) && false === $caseSensitive) {
+                    $groupValue = strtolower($groupValue);
+                }
+
+                $groupValues[$groupPropertyPath] = $groupValue;
+            }
+            $group = implode('-', $groupValues);
+
+            $result[$group][$key] = $value;
+        }
+
+        return $result;
+    }
+
+    /**
      * @param array|object[] $array1
      * @param array|object[] $array2
      * @return array|object[]

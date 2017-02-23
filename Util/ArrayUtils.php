@@ -104,6 +104,18 @@ class ArrayUtils
 
     /**
      * @param array $array
+     * @return mixed
+     */
+    public static function arrayShiftAssoc(array &$array)
+    {
+        $value = reset($array);
+        unset($array[key($array)]);
+
+        return $value;
+    }
+
+    /**
+     * @param array $array
      * @param string $key
      * @return array
      */

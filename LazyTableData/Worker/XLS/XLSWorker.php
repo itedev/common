@@ -70,8 +70,13 @@ class XLSWorker implements ApiWorkerInterface
             ->getCellIterator();
 //        $iterator->setIterateOnlyExistingCells(true);
 
+        /** @var \PHPExcel_Cell $cell */
         foreach ($iterator as $cell) {
-            $row[] = $cell->getValue();
+            try {
+                $row[] = $cell->getCalculatedValue();
+            } catch (\PHPExcel_Exception $ex) {
+                $row[] = $cell->getValue();
+            }
         }
 
 
@@ -86,9 +91,15 @@ class XLSWorker implements ApiWorkerInterface
      */
     public function loadCell($rowNumber, $cellNumber)
     {
-        return $this->excelInstance->getSheet($this->workSheetId)
-            ->getCellByColumnAndRow($cellNumber, $rowNumber)
-            ->getValue();
+        $cell = $this->excelInstance->getSheet($this->workSheetId)
+            ->getCellByColumnAndRow($cellNumber, $rowNumber);
+        try {
+            $val = $cell->getCalculatedValue();
+        } catch (\PHPExcel_Exception $ex) {
+            $val = $cell->getValue();
+        }
+
+        return $val;
     }
 
     /**

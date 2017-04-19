@@ -5,6 +5,8 @@ namespace ITE\Common\CdnJs;
 /**
  * Class ApiWrapper
  *
+ * @deprecated
+ *
  * @author sam0delkin <t.samodelkin@gmail.com>
  */
 class ApiWrapper
@@ -44,7 +46,7 @@ class ApiWrapper
         $results = $this->search($packageName, ['assets']);
 
         foreach ($results as $result) {
-            foreach($result['assets'] as $asset) {
+            foreach ($result['assets'] as $asset) {
                 if ($asset['version'] == $version) {
                     foreach ($asset['files'] as $file) {
                         if ($file['name'] == $fileName) {
@@ -78,7 +80,9 @@ class ApiWrapper
     {
         $suffix = implode('/', [$packageName, $version, $fileName]);
 
-        return $protocol == 'http' ? self::CDN_HTTP_URL.'/'.$suffix : self::CDN_HTTPS_URL.'/'.$suffix;
+        return $protocol == 'http'
+            ? self::CDN_HTTP_URL . '/' . $suffix
+            : self::CDN_HTTPS_URL . '/' . $suffix;
     }
 
     /**
@@ -88,6 +92,9 @@ class ApiWrapper
      */
     protected function buildApiUrl($query, $fields)
     {
-        return self::API_URL.http_build_query(['search' => $query, 'fields' => implode(',', $fields)]);
+        return self::API_URL . http_build_query([
+            'search' => $query,
+            'fields' => implode(',', $fields),
+        ]);
     }
 }

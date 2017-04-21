@@ -104,6 +104,32 @@ class ArrayUtils
 
     /**
      * @param array $array
+     * @param string $offset
+     * @param null $length
+     * @param mixed $replacement
+     * @return array
+     */
+    public static function arraySpliceAssoc(array &$array, $offset, $length, $replacement)
+    {
+        $replacement = (array) $replacement;
+
+        $keyIndices = array_flip(array_keys($array));
+        if (isset($array[$offset]) && is_string($offset)) {
+            $offset = $keyIndices[$offset];
+        }
+        if (isset($array[$length]) && is_string($length)) {
+            $length = $keyIndices[$length] - $offset;
+        }
+
+        $array = array_slice($array, 0, $offset, true)
+        + $replacement
+        + array_slice($array, $offset + $length, null, true);
+
+        return $array;
+    }
+
+    /**
+     * @param array $array
      * @return mixed
      */
     public static function arrayShiftAssoc(array &$array)

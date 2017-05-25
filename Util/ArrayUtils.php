@@ -104,6 +104,16 @@ class ArrayUtils
 
     /**
      * @param array $array
+     * @param array $keys
+     * @return array
+     */
+    public static function arrayDiffKey(array $array, array $keys)
+    {
+        return array_diff_key($array, array_flip($keys));
+    }
+
+    /**
+     * @param array $array
      * @param string $offset
      * @param null $length
      * @param mixed $replacement

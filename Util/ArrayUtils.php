@@ -2,6 +2,8 @@
 
 namespace ITE\Common\Util;
 
+use ITE\Common\Exception\InvalidArgumentException;
+use ITE\Common\Exception\UnexpectedTypeException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\PropertyAccess\PropertyPathInterface;
@@ -148,6 +150,72 @@ class ArrayUtils
         unset($array[key($array)]);
 
         return $value;
+    }
+
+    /**
+     * @param array $array
+     * @param callable $callback
+     * @return bool
+     */
+    public static function exists(array $array, $callback)
+    {
+        foreach ($array as $i => $value) {
+            if (call_user_func_array($callback, [$value, $i])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array $array
+     * @param int|string $key
+     * @param bool $strict
+     * @param null $defaultValue
+     * @return array
+     */
+    public static function unwrapByKey(array $array, $key, $strict = true, $defaultValue = null)
+    {
+        return array_map(function ($value) use ($key, $strict, $defaultValue) {
+            if (!is_array($value)) {
+                throw new UnexpectedTypeException($value, 'array');
+            }
+            if (!array_key_exists($key, $value)) {
+                if ($strict) {
+                    throw new InvalidArgumentException(sprintf('Key "%s" is missing.'));
+                } else {
+                    return $defaultValue;
+                }
+            }
+        }, $array);
+    }
+
+    /**
+     * @param array $array
+     * @param string $propertyPath
+     * @param bool $strict
+     * @param null $defaultValue
+     * @return array
+     */
+    public static function unwrapByPropertyPath(array $array, $propertyPath, $strict = true, $defaultValue = null)
+    {
+        $propertyAccessor = self::getPropertyAccessor();
+
+        return array_map(function ($value) use ($propertyAccessor, $propertyPath, $strict, $defaultValue) {
+            if (!is_array($value)) {
+                throw new UnexpectedTypeException($value, 'array');
+            }
+            try {
+                return $propertyAccessor->getValue($value, $propertyPath);
+            } catch (\Exception $e) {
+                if ($strict) {
+                    throw $e;
+                }
+
+                return $defaultValue;
+            }
+        }, $array);
     }
 
     /**

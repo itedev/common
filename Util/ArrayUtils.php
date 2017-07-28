@@ -170,6 +170,22 @@ class ArrayUtils
 
     /**
      * @param array $array
+     * @param callable $callback
+     * @return bool
+     */
+    public static function forAll(array $array, $callback)
+    {
+        foreach ($array as $i => $value) {
+            if (!call_user_func_array($callback, [$value, $i])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param array $array
      * @param int|string $key
      * @param bool $strict
      * @param null $defaultValue

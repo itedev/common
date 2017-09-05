@@ -203,6 +203,8 @@ class ArrayUtils
                 } else {
                     return $defaultValue;
                 }
+            } else {
+                return $value[$key];
             }
         }, $array);
     }

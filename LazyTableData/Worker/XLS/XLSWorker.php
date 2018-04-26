@@ -200,7 +200,26 @@ class XLSWorker implements ApiWorkerInterface
      */
     public function getRowsCount()
     {
-        return $this->excelInstance->getSheet($this->workSheetId)->getHighestRow();
+        $count = 0;
+        $rows = $this->excelInstance->getSheet($this->workSheetId)->getRowIterator();
+
+        foreach ($rows as $row) {
+            $empty = true;
+
+            /** @var \PHPExcel_Cell $item */
+            foreach ($row->getCellIterator() as $item) {
+                if (!empty($item->getValue())) {
+                    $empty = false;
+                    break;
+                }
+            }
+            if ($empty) {
+                break;
+            }
+            $count++;
+        }
+
+        return $count;
     }
 
     /**

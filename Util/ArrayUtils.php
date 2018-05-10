@@ -221,8 +221,8 @@ class ArrayUtils
         $propertyAccessor = self::getPropertyAccessor();
 
         return array_map(function ($value) use ($propertyAccessor, $propertyPath, $strict, $defaultValue) {
-            if (!is_array($value)) {
-                throw new UnexpectedTypeException($value, 'array');
+            if (!is_array($value) && !is_object($value)) {
+                throw new UnexpectedTypeException($value, 'object or array');
             }
             try {
                 return $propertyAccessor->getValue($value, $propertyPath);
@@ -496,6 +496,30 @@ class ArrayUtils
         return array_udiff($array1, $array2, function ($object1, $object2) {
             return strcmp(spl_object_hash($object1), spl_object_hash($object2));
         });
+    }
+
+    /**
+     * @param array  $array
+     * @param string $propertyPath
+     * @param null   $comparisonFunction
+     *
+     * @return mixed
+     */
+    public static function maxByPropertyPath(array $array, $propertyPath, $comparisonFunction = null)
+    {
+        return max(self::unwrapByPropertyPath($array, $propertyPath));
+    }
+
+    /**
+     * @param array  $array
+     * @param string $propertyPath
+     * @param null   $comparisonFunction
+     *
+     * @return mixed
+     */
+    public static function minByPropertyPath(array $array, $propertyPath, $comparisonFunction = null)
+    {
+        return min(self::unwrapByPropertyPath($array, $propertyPath));
     }
 
     /**

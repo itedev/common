@@ -221,9 +221,6 @@ class ArrayUtils
         $propertyAccessor = self::getPropertyAccessor();
 
         return array_map(function ($value) use ($propertyAccessor, $propertyPath, $strict, $defaultValue) {
-            if (!is_array($value)) {
-                throw new UnexpectedTypeException($value, 'array');
-            }
             try {
                 return $propertyAccessor->getValue($value, $propertyPath);
             } catch (\Exception $e) {

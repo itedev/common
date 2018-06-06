@@ -29,6 +29,11 @@ class XLSWorker implements ApiWorkerInterface
     private $excelInstance;
 
     /**
+     * @var int|null
+     */
+    private $rowsCount = null;
+
+    /**
      * @param string $fileName
      * @param  int   $workSheetId
      * @throws \Exception
@@ -54,6 +59,7 @@ class XLSWorker implements ApiWorkerInterface
     public function setWorksheet($worksheetId)
     {
         $this->workSheetId = $worksheetId;
+        $this->rowsCount = null;
     }
 
 
@@ -125,6 +131,7 @@ class XLSWorker implements ApiWorkerInterface
         $this->excelInstance->getSheet($this->workSheetId)->fromArray($rowData);
         $writer = PHPExcel_IOFactory::createWriter($this->excelInstance, 'Excel2007');
         $writer->save($fileName ? : $this->fileName);
+        $this->rowsCount = null;
     }
 
     /**
@@ -173,6 +180,7 @@ class XLSWorker implements ApiWorkerInterface
         $this->excelInstance->getSheet($this->workSheetId)->removeRow($rowNumber);
         $writer = PHPExcel_IOFactory::createWriter($this->excelInstance, 'Excel2007');
         $writer->save($this->fileName);
+        $this->rowsCount = null;
     }
 
     /**
@@ -184,6 +192,7 @@ class XLSWorker implements ApiWorkerInterface
         $sheet = $this->excelInstance->getSheet($this->workSheetId);
         $sheet->insertNewRowBefore();
         $this->updateRow(1, $rowData);
+        $this->rowsCount = null;
     }
 
     /**
@@ -200,6 +209,10 @@ class XLSWorker implements ApiWorkerInterface
      */
     public function getRowsCount()
     {
+        if (null !== $this->rowsCount) {
+            return $this->rowsCount;
+        }
+
         $count = 0;
         $rows = $this->excelInstance->getSheet($this->workSheetId)->getRowIterator();
 
@@ -219,7 +232,7 @@ class XLSWorker implements ApiWorkerInterface
             $count++;
         }
 
-        return $count;
+        return $this->rowsCount = $count;
     }
 
     /**

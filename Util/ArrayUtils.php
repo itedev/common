@@ -519,6 +519,32 @@ class ArrayUtils
     }
 
     /**
+     * @param array  $array
+     * @param string $propertyPath
+     *
+     * @return array
+     */
+    public static function arrayUniqueByPropertyPath(array $array, $propertyPath)
+    {
+        $accessor = self::getPropertyAccessor();
+        $values = [];
+        $keys = [];
+
+        foreach ($array as $key => $item) {
+            $value = $accessor->getValue($item, $propertyPath);
+
+            if (isset($values[$value])) {
+                continue;
+            }
+
+            $values[$value] = $item;
+            $keys[$value] = $key;
+        }
+
+        return array_combine($keys, $values);
+    }
+
+    /**
      * @return PropertyAccessor
      */
     protected static function getPropertyAccessor()

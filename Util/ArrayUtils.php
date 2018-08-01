@@ -462,6 +462,28 @@ class ArrayUtils
      * @param bool $caseSensitive
      * @return array
      */
+    public static function groupByCallable(array $array, $callable, $caseSensitive = false)
+    {
+        $groupKeys = is_array($groupBy) ? $groupBy : [$groupBy];
+        $result = [];
+        foreach ($array as $key => $value) {
+            $group = call_user_func_array($callable, [$value, $key]);
+            if (is_string($group) && false === $caseSensitive) {
+                $group = strtolower($group);
+            }
+
+            $result[$group][$key] = $value;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array $array
+     * @param string|array $groupBy
+     * @param bool $caseSensitive
+     * @return array
+     */
     public static function groupByPropertyPath(array $array, $groupBy, $caseSensitive = false)
     {
         $propertyAccessor = self::getPropertyAccessor();

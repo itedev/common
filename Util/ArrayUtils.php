@@ -20,6 +20,25 @@ class ArrayUtils
 
     /**
      * @param array $array
+     * @param \Closure $callback
+     * @return array
+     */
+    public static function partition(array $array, \Closure $callback)
+    {
+        $matches = $noMatches = [];
+        foreach ($array as $key => $element) {
+            if ($callback($element, $key)) {
+                $matches[$key] = $element;
+            } else {
+                $noMatches[$key] = $element;
+            }
+        }
+
+        return [$matches, $noMatches];
+    }
+
+    /**
+     * @param array $array
      * @param mixed $value
      * @return bool
      */

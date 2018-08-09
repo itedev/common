@@ -477,13 +477,12 @@ class ArrayUtils
 
     /**
      * @param array $array
-     * @param string|array $groupBy
+     * @param callable $callable
      * @param bool $caseSensitive
      * @return array
      */
     public static function groupByCallable(array $array, $callable, $caseSensitive = false)
     {
-        $groupKeys = is_array($groupBy) ? $groupBy : [$groupBy];
         $result = [];
         foreach ($array as $key => $value) {
             $group = call_user_func_array($callable, [$value, $key]);

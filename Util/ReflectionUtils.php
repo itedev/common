@@ -46,4 +46,19 @@ class ReflectionUtils
 
         $refProp->setValue($object, $value);
     }
+
+    /**
+     * @param object $object
+     * @param string $method
+     * @param array $arguments
+     * @return mixed
+     */
+    public static function callObjectMethod($object, $method, array $arguments = [])
+    {
+        $refObject = new \ReflectionObject($object);
+        $method = $refObject->getMethod($method);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($object, $arguments);
+    }
 }

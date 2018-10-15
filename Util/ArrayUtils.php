@@ -374,6 +374,52 @@ class ArrayUtils
      * @param array $fields
      * @return bool
      */
+    public static function multiSortByKey(
+        array &$array,
+        array $fields
+    ) {
+        return uasort($array, function ($a, $b) use ($fields) {
+            $result = 0;
+            foreach ($fields as $key => $options) {
+                if (is_string($options)) {
+                    $direction = $options;
+                    $comparisonFunction = null;
+                } elseif (is_array($options)) {
+                    $direction = $options['direction'];
+                    $comparisonFunction = self::getValue($options, 'comparison_function', null);
+                } else {
+                    throw new UnexpectedTypeException($options, 'string or array');
+                }
+
+                $aValue = $a[$key];
+                $bValue = $b[$key];
+
+                if (is_callable($comparisonFunction)) {
+                    $result = call_user_func_array($comparisonFunction, [$aValue, $bValue]);
+                } else {
+                    if ($aValue == $bValue) {
+                        $result = 0;
+                    } else {
+                        $result = $aValue > $bValue ? 1 : -1;
+                    }
+                }
+                if ('desc' === $direction) {
+                    $result *= -1;
+                }
+                if (0 !== $result) {
+                    break;
+                }
+            }
+
+            return $result;
+        });
+    }
+
+    /**
+     * @param array $array
+     * @param array $fields
+     * @return bool
+     */
     public static function multiSortByPropertyPath(
         array &$array,
         array $fields

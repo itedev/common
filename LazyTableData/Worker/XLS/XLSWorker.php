@@ -6,6 +6,9 @@ use ITE\Common\LazyTableData\ApiWorkerInterface;
 use ITE\Common\LazyTableData\Data\Row;
 use PHPExcel;
 use PHPExcel_IOFactory;
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 /**
  * Class XLSWorker
@@ -24,7 +27,7 @@ class XLSWorker implements ApiWorkerInterface
     private $workSheetId;
 
     /**
-     * @var PHPExcel
+     * @var Spreadsheet
      */
     private $excelInstance;
 
@@ -50,7 +53,8 @@ class XLSWorker implements ApiWorkerInterface
 
         $this->fileName    = $fileName;
         $this->workSheetId = $workSheetId;
-        $this->excelInstance = PHPExcel_IOFactory::load($this->fileName);
+        $reader = IOFactory::createReaderForFile($this->fileName);
+        $this->excelInstance = $reader->load($this->fileName);
     }
 
     /**
@@ -76,11 +80,11 @@ class XLSWorker implements ApiWorkerInterface
             ->getCellIterator();
 //        $iterator->setIterateOnlyExistingCells(true);
 
-        /** @var \PHPExcel_Cell $cell */
+        /** @var Cell $cell */
         foreach ($iterator as $cell) {
             try {
                 $row[] = $cell->getCalculatedValue();
-            } catch (\PHPExcel_Exception $ex) {
+            } catch (\Exception $ex) {
                 $row[] = $cell->getValue();
             }
         }
@@ -101,7 +105,7 @@ class XLSWorker implements ApiWorkerInterface
             ->getCellByColumnAndRow($cellNumber, $rowNumber);
         try {
             $val = $cell->getCalculatedValue();
-        } catch (\PHPExcel_Exception $ex) {
+        } catch (\Exception $ex) {
             $val = $cell->getValue();
         }
 

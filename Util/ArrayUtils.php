@@ -55,6 +55,19 @@ class ArrayUtils
     }
 
     /**
+     * @param array $array
+     * @param callable $callable
+     */
+    public static function removeByCallable(array &$array, $callable)
+    {
+        foreach ($array as $key => $value) {
+            if (true === call_user_func_array($callable, [$value, $key])) {
+                unset($array[$key]);
+            }
+        }
+    }
+
+    /**
      * @return mixed
      */
     public static function replaceRecursive()

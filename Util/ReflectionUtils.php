@@ -61,4 +61,18 @@ class ReflectionUtils
 
         return $method->invokeArgs($object, $arguments);
     }
+
+    /**
+     * @param object $object
+     * @param string $property
+     * @return bool
+     * @throws \ReflectionException
+     */
+    public static function hasProperty($object, $property)
+    {
+        $class = get_class($object);
+        $refClass = new \ReflectionClass($class);
+
+        return $refClass->hasProperty($property);
+    }
 }

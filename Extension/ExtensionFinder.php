@@ -31,6 +31,10 @@ class ExtensionFinder
             if ($ownDir && strpos($filePath, $ownDir) !== false) {
                 continue;
             }
+            
+            if (!class_exists($className)) {
+                continue;
+            }
 
             $reflected = new \ReflectionClass($className);
 

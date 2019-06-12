@@ -108,6 +108,24 @@ class ArrayUtils
             return call_user_func_array($callback, [$array[$key], $key]);
         }, array_keys($array));
     }
+    
+    /**
+     * @param $callback
+     * @param array $array
+     * @return array
+     */
+    public static function arrayMapKeyRecursive($callback, array $array)
+    {
+        $ret = array_combine(array_map($callback, array_keys($array)), array_values($array));
+
+        foreach ($ret as &$item) {
+            if (is_array($item)) {
+                $item = self::arrayMapKeyRecursive($callback, $item);
+            }
+        }
+
+        return $ret;
+    }
 
     /**
      * @param array $array

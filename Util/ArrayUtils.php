@@ -289,13 +289,19 @@ class ArrayUtils
     /**
      * @param array $array
      * @param string $key
+     * @param bool $removeKey
      * @return array
      */
-    public static function indexByKey(array $array, $key)
+    public static function indexByKey(array $array, $key, $removeKey = false)
     {
         $result = [];
         foreach ($array as $i => $value) {
-            $result[$value[$key]] = $value;
+            $index = $value[$key];
+
+            if ($removeKey) {
+                unset($value[$key]);
+            }
+            $result[$index] = $value;
         }
 
         return $result;

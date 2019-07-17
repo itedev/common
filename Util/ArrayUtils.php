@@ -114,6 +114,20 @@ class ArrayUtils
      * @param array $array
      * @return array
      */
+    public static function arrayMapKeys($callback, array $array)
+    {
+        $keys = array_map(function ($key) use ($callback, $array) {
+            return call_user_func($callback, $key);
+        }, array_keys($array));
+
+        return array_combine($keys, array_values($array));
+    }
+    
+    /**
+     * @param $callback
+     * @param array $array
+     * @return array
+     */
     public static function arrayMapKeyRecursive($callback, array $array)
     {
         $ret = array_combine(array_map($callback, array_keys($array)), array_values($array));

@@ -324,15 +324,26 @@ class ArrayUtils
     /**
      * @param array $array
      * @param string|PropertyPathInterface $propertyPath
+     * @param bool $strict
+     * @param mixed $defaultValue
      * @return array
+     * @throws \Exception
      */
-    public static function indexByPropertyPath(array $array, $propertyPath)
+    public static function indexByPropertyPath(array $array, $propertyPath, $strict = true, $defaultValue = null)
     {
         $propertyAccessor = self::getPropertyAccessor();
 
         $result = [];
         foreach ($array as $i => $value) {
-            $propertyValue = $propertyAccessor->getValue($value, $propertyPath);
+            try {
+                $propertyValue = $propertyAccessor->getValue($value, $propertyPath);
+            } catch (\Exception $e) {
+                if ($strict) {
+                    throw $e;
+                }
+
+                $propertyValue = $defaultValue;
+            }
             $result[$propertyValue] = $value;
         }
 
@@ -597,10 +608,17 @@ class ArrayUtils
      * @param array $array
      * @param string|array $groupBy
      * @param bool $caseSensitive
+     * @param bool $strict
+     * @param mixed $defaultGroupValue
      * @return array
      */
-    public static function groupByPropertyPath(array $array, $groupBy, $caseSensitive = false)
-    {
+    public static function groupByPropertyPath(
+        array $array,
+        $groupBy,
+        $caseSensitive = false,
+        $strict = true,
+        $defaultGroupValue = null
+    ) {
         $propertyAccessor = self::getPropertyAccessor();
 
         $groupPropertyPaths = is_array($groupBy) ? $groupBy : [$groupBy];
@@ -608,7 +626,16 @@ class ArrayUtils
         foreach ($array as $key => $value) {
             $groupValues = [];
             foreach ($groupPropertyPaths as $groupPropertyPath) {
-                $groupValue = $propertyAccessor->getValue($value, $groupPropertyPath);
+                try {
+                    $groupValue = $propertyAccessor->getValue($value, $groupPropertyPath);
+                } catch (\Exception $e) {
+                    if ($strict) {
+                        throw $e;
+                    }
+
+                    $groupValue = $defaultGroupValue;
+                }
+
                 if (is_string($groupValue) && false === $caseSensitive) {
                     $groupValue = strtolower($groupValue);
                 }

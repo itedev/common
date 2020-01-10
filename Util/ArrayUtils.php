@@ -20,6 +20,65 @@ class ArrayUtils
 
     /**
      * @param array $array
+     * @return int|string|null
+     */
+    public static function getFirstKey(array $array)
+    {
+        if (empty($array)) {
+            return null;
+        }
+
+        reset($array);
+
+        return key($array);
+    }
+
+    /**
+     * @param array $array
+     * @return mixed|null
+     */
+    public static function getFirstValue(array $array)
+    {
+        if (empty($array)) {
+            return null;
+        }
+
+        return reset($array);
+    }
+
+    /**
+     * @param array $array
+     * @return int|string|null
+     */
+    public static function getLastKey(array $array)
+    {
+        if (empty($array)) {
+            return null;
+        }
+
+        end($array);
+        // no need to reset because it is copy of array
+
+        return key($array);
+    }
+
+    /**
+     * @param array $array
+     * @return mixed|null
+     */
+    public static function getLastValue(array $array)
+    {
+        if (empty($array)) {
+            return null;
+        }
+
+        // no need to reset because it is copy of array
+
+        return end($array);
+    }
+
+    /**
+     * @param array $array
      * @param \Closure $callback
      * @return array
      */

@@ -26,21 +26,36 @@ class DateTimeUtils
     /**
      * @param \DateTime|null $date
      * @param \DateTime|null $time
-     * @return \DateTime|null
+     * @param null $inputTimezone
+     * @param null $outputTimezone
+     *
+     * @return \DateTime|false|null
      */
-    public static function createFromDateAndTime(\DateTime $date = null, \DateTime $time = null)
+    public static function createFromDateAndTime(\DateTime $date = null, \DateTime $time = null, $inputTimezone = null, $outputTimezone = null)
     {
         if (null === $date || null === $time) {
             return null;
         }
 
-        $dateTime = clone $date;
-        $dateTime->setTimezone($time->getTimezone());
-        $dateTime->setTime(
-            (int) $time->format('H'),
-            (int) $time->format('i'),
-            (int) $time->format('s')
-        );
+        $inputTimezone = $inputTimezone ? new \DateTimeZone($inputTimezone) : new \DateTimeZone('UTC');
+        $outputTimezone = $outputTimezone ? new \DateTimeZone($outputTimezone) : new \DateTimeZone('UTC');
+
+        $dateTimeDate = clone $date;
+        $dateTimeDate->setTimezone($outputTimezone);
+        $dateTimeTime = clone $time;
+        $dateTimeTime->setTimezone($outputTimezone);
+
+        $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', sprintf(
+            '%s-%s-%s %s:%s:%s',
+            $dateTimeDate->format('Y'),
+            $dateTimeDate->format('m'),
+            $dateTimeDate->format('d'),
+            $dateTimeTime->format('H'),
+            $dateTimeTime->format('i'),
+            $dateTimeTime->format('s')
+        ), $outputTimezone);
+
+        $dateTime->setTimezone($inputTimezone);
 
         //$dateTime = clone $time;
         //$dateTime->setDate(

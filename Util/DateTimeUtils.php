@@ -57,12 +57,13 @@ class DateTimeUtils
 
         $dateTime->setTimezone($inputTimezone);
 
-        //$dateTime = clone $time;
-        //$dateTime->setDate(
-        //    (int) $time->format('Y'),
-        //    (int) $time->format('n'),
-        //    (int) $time->format('j')
-        //);
+//        $dateTime = clone $date;
+//        $dateTime->setTimezone($time->getTimezone());
+//        $dateTime->setTime(
+//            (int) $time->format('H'),
+//            (int) $time->format('i'),
+//            (int) $time->format('s')
+//        );
 
         return $dateTime;
     }

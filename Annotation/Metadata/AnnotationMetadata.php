@@ -3,6 +3,7 @@
 namespace ITE\Common\Annotation\Metadata;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\Reader;
 
 /**
  * Class AnnotationMetadata
@@ -42,10 +43,10 @@ class AnnotationMetadata
     private $reflected;
 
     /**
-     * @param string           $className
-     * @param AnnotationReader $reader
+     * @param string $className
+     * @param Reader $reader
      */
-    public function __construct($className, AnnotationReader $reader = null)
+    public function __construct($className, Reader $reader = null)
     {
         $this->className = $className;
         $this->reader    = $reader ?: new AnnotationReader();

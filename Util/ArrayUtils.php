@@ -767,6 +767,19 @@ class ArrayUtils
         return array_combine($keys, $values);
     }
 
+    public static function arrayUnique(array $array): array
+    {
+        $uniqueArray = [];
+
+        foreach ($array as $key => $value) {
+            if (!in_array($value, $uniqueArray, true)) {
+                $uniqueArray[$key] = $value;
+            }
+        }
+
+        return $uniqueArray;
+    }
+
     /**
      * @return PropertyAccessor
      */

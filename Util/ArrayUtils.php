@@ -787,12 +787,15 @@ class ArrayUtils
         $accessor = self::getPropertyAccessor();
         $propertyPath = new PropertyPath($propertyPath);
         $propertyPathBuilder = new PropertyPathBuilder($propertyPath);
+        $firstTime = true;
 
         for ($i = $propertyPath->getLength() - 1; $i >= 0; $i--) {
             $previousIndex = $propertyPath->getElement($i);
             $propertyPathBuilder->remove($i);
             if (0 === $propertyPathBuilder->getLength()) {
-                unset($array[$previousIndex]);
+                if (empty($array[$previousIndex])) {
+                    unset($array[$previousIndex]);
+                }
 
                 return;
             }
@@ -801,7 +804,10 @@ class ArrayUtils
             if (!is_array($currentValue) || empty($currentValue)) {
                 break;
             }
-            unset($currentValue[$previousIndex]);
+            if ($firstTime || empty($currentValue[$previousIndex])) {
+                unset($currentValue[$previousIndex]);
+                $firstTime = false;
+            }
             $accessor->setValue($array, $propertyPathBuilder->getPropertyPath(), $currentValue);
         }
     }

@@ -779,6 +779,30 @@ class ArrayUtils
 
         return $uniqueArray;
     }
+    
+    public static function unsetByPropertyPath(array &$array, $propertyPath): void
+    {
+        $accessor = self::getPropertyAccessor();
+        $propertyPath = new PropertyPath($propertyPath);
+        $propertyPathBuilder = new PropertyPathBuilder($propertyPath);
+
+        for ($i = $propertyPath->getLength() - 1; $i >= 0; $i--) {
+            $previousIndex = $propertyPath->getElement($i);
+            $propertyPathBuilder->remove($i);
+            if (0 === $propertyPathBuilder->getLength()) {
+                unset($array[$previousIndex]);
+
+                return;
+            }
+            $currentValue = $accessor->getValue($array, $propertyPathBuilder->getPropertyPath());
+
+            if (!is_array($currentValue) || empty($currentValue)) {
+                break;
+            }
+            unset($currentValue[$previousIndex]);
+            $accessor->setValue($array, $propertyPathBuilder->getPropertyPath(), $currentValue);
+        }
+    }
 
     /**
      * @return PropertyAccessor

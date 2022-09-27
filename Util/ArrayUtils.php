@@ -100,6 +100,20 @@ class ArrayUtils
 
     /**
      * @param array $array
+     * @param \Closure $callback
+     * @return mixed
+     */
+    public static function total(array $array, \Closure $callback, $total = 0)
+    {
+        foreach ($array as $key => $element) {
+            $total = $callback($total, $element, $key);
+        }
+
+        return $total;
+    }
+
+    /**
+     * @param array $array
      * @param mixed $value
      * @return bool
      */
@@ -200,6 +214,18 @@ class ArrayUtils
         }
 
         return $ret;
+    }
+
+    public static function transform(array $array, callable $callback): array
+    {
+        $result = [];
+        foreach ($array as $key => $value) {
+            [$newKey, $newValue] = $callback($value, $key);
+
+            $result[$newKey] = $newValue;
+        }
+
+        return $result;
     }
 
     /**
@@ -422,6 +448,26 @@ class ArrayUtils
         foreach ($array as $key => $value) {
             $index = call_user_func_array($callable, [$value, $key]);
             $result[$index] = $value;
+        }
+
+        return $result;
+    }
+
+    public static function sort(array &$array, string $direction = 'asc', callable $comparisonFunction = null): bool
+    {
+        $result = uasort($array, function ($a, $b) use ($comparisonFunction) {
+            if (is_callable($comparisonFunction)) {
+                return call_user_func_array($comparisonFunction, [$a, $b]);
+            } else {
+                if ($a == $b) {
+                    return 0;
+                }
+
+                return $a > $b ? 1 : -1;
+            }
+        });
+        if ($result && 'desc' === $direction) {
+            $array = array_reverse($array, true);
         }
 
         return $result;

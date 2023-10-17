@@ -676,6 +676,11 @@ class ArrayUtils
             $groupValues = [];
             foreach ($groupKeys as $groupKey) {
                 $groupValue = $value[$groupKey];
+
+                if ($groupValue instanceof \DateTime) {
+                    $groupValue = $groupValue->format(\DateTime::ATOM);
+                }
+
                 if (is_string($groupValue) && false === $caseSensitive) {
                     $groupValue = strtolower($groupValue);
                 }
@@ -735,6 +740,10 @@ class ArrayUtils
             foreach ($groupPropertyPaths as $groupPropertyPath) {
                 try {
                     $groupValue = $propertyAccessor->getValue($value, $groupPropertyPath);
+
+                    if ($groupValue instanceof \DateTime) {
+                        $groupValue = $groupValue->format(\DateTime::ATOM);
+                    }
                 } catch (\Exception $e) {
                     if ($strict) {
                         throw $e;

@@ -36,10 +36,14 @@ class ExtensionFinder
                 continue;
             }
 
-            $reflected = new \ReflectionClass($className);
+            try {
+                $reflected = new \ReflectionClass($className);
 
-            if (!$reflected->isInstantiable()) {
-               continue;
+                if (!$reflected->isInstantiable()) {
+                    continue;
+                }
+            } catch (\Exception $e) {
+                continue;
             }
 
             try {
